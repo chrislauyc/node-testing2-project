@@ -105,5 +105,11 @@ exports.up = function(knex){
     })
 }
 exports.down = function(knex){
-    return knex.schema.dropTableIfExists("table_name");
+    return knex.schema
+    .dropTableIfExists("mfcs")
+    .dropTableIfExists("sweeps")
+    .dropTableIfExists("temperatures")
+    .dropTableIfExists("experiments")
+    .dropTableIfExists("gases")
+    .dropTableIfExists("materials");
 }
