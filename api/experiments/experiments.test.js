@@ -35,7 +35,7 @@ describe("experiment model",()=>{
     });
     describe("get",()=>{ //get with query
         test("returns the correct number of experiments",async()=>{
-            await db("materials").insert(nanodiamond);
+            const [material_id] = await db("materials").insert(nanodiamond);
             await db("experiments").insert({...experiment2,material_id});
             const exps = await model.get();
             expect(exps).toHaveLength(2);
@@ -50,18 +50,18 @@ describe("experiment model",()=>{
     });
     describe("insert",()=>{
         test("adds experiment to db",async()=>{
-            await model.insert({experiment2,material_id:1});
+            await model.insert({...experiment2,material_id:1});
             expect(await db("experiments")).toHaveLength(2);
         });
         test("returns the inserted experiment",async()=>{
-            const exp = await model.insert({experiment2,material_id:1});
+            const exp = await model.insert({...experiment2,material_id:1});
             expect(exp).toMatchObject({...experiment2,material_id:1,experiment_id:2});
         });
     });
     describe("update",()=>{
         test("updates an experiment in db",async()=>{
             await model.update(1,{...experiment2,material_id:1,NP_id:10});
-            const updatedExp = await db("experiments").where({experiment_id:2}).first();
+            const updatedExp = await db("experiments").where({experiment_id:1}).first();
             expect(updatedExp.NP_id).toBe(10);
         });
         test("returns the updated experiment",async()=>{
@@ -71,11 +71,11 @@ describe("experiment model",()=>{
     });
     describe("delete",()=>{
         test("deletes an experiment from the db",async()=>{
-            await model.delete(1);
+            await model.remove(1);
             expect(await db("experiments")).toHaveLength(0);
         });
         test("returns the deleted experiment from the db",async()=>{
-            const deletedExp = await model.delete(1);
+            const deletedExp = await model.remove(1);
             expect(deletedExp).toMatchObject({...experiment1,material_id:1});
         });
     });

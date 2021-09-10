@@ -25,6 +25,9 @@ exports.up = function(knex){
         .inTable("materials")
         .onUpdate("CASCADE")
         .onDelete("CASCADE");
+        table.integer("NP_id")
+        .unsigned()
+        .notNullable();
     })
     .createTable("temperatures",(table)=>{
         table.increments("temperature_id");
@@ -50,7 +53,7 @@ exports.up = function(knex){
         table.integer("experiment_id")
         .unsigned()
         .notNullable()
-        .references("experiemnts_id")
+        .references("experiment_id")
         .inTable("experiments")
         .onUpdate("CASCADE")
         .onDelete("CASCADE");
@@ -71,7 +74,6 @@ exports.up = function(knex){
         table.double("green laser V");
         table.double("waveplate");
         table.boolean("uv lamp").defaultTo(false);
-        table.double("sweep time");
         table.double("peak amplitude");
         table.double("peak position");
         table.double("peak width");
