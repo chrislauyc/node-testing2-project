@@ -1,22 +1,33 @@
 const model = require("./experiment-model");
 const db = require("../../data/db-config");
 
-const graphite = {
+const material1 = {
     material_name:"graphite"
 };
-const nanodiamond = {
-    material_name:"nanodiamond"
-}
+
 const experiment1 = {
     experiment_date: Date.now(),
-    NP_id: 0
-}
-const experiment2 = {
-    experiment_date: Date.now(),
-    NP_id: 2
+    NP_id: 0,
+    material_id: 1
 }
 
-describe("experiment model",()=>{
+const sweep1 = {
+    experiment_id:1,
+    "sweep scan #":1
+}
+const gas1 = {
+    gas_name:"argon"
+}
+const mfc1 = {
+    sweep_id:1,
+    gas_id:1,
+}
+const mfc2 = {
+    sweep_id:1,
+    gas_id:1,
+    "mfc_%":50
+}
+describe("mfcs model",()=>{
     test("sanity check",()=>{
         expect(1).toBe(1);
     });
@@ -25,58 +36,62 @@ describe("experiment model",()=>{
         await db.migrate.latest();
     });
     beforeEach(async()=>{
-        await db("mfcs").truncate();
+        await db("sweeps").truncate();
+        await db("experiments").truncate();
         await db("materials").truncate();
-        const [material_id] = await db("materials").insert(graphite);
-        await db("mfcs").insert({...experiment1,material_id});
+        await db("gases").truncate();
+        await db("gases").insert(gas1);
+        await db("materials").insert(material1);
+        await db("experiments").insert(experiment1);
+        await db("sweeps").insert(sweep1);
+        await db("mfcs").insert(mfc1);
     });
     afterAll(async()=>{
         await db.destroy();
     });
     describe("get",()=>{ //get with query
         test("returns the correct number of mfcs",async()=>{
-            const [material_id] = await db("materials").insert(nanodiamond);
-            await db("mfcs").insert({...experiment2,material_id});
-            const exps = await model.get();
-            expect(exps).toHaveLength(2);
+            await db("mfcs").insert(mfc2);
+            const rows = await model.get();
+            expect(rows).toHaveLength(2);
         }); 
     });
     describe("getById",()=>{
-        test("returns the correct experiment",async()=>{
-            const expected = await db("mfcs").where({experiment_id:1}).first();
+        test("returns the correct mfcs",async()=>{
+            const expected = await db("mfcs").where({mfc_id:1}).first();
             const actual = await model.getById(1);
             expect(expected).toMatchObject(actual);
         });
     });
     describe("insert",()=>{
-        test("adds experiment to db",async()=>{
-            await model.insert({...experiment2,material_id:1});
+        test("adds mfc to db",async()=>{
+            await model.insert(mfc2);
             expect(await db("mfcs")).toHaveLength(2);
         });
-        test("returns the inserted experiment",async()=>{
-            const exp = await model.insert({...experiment2,material_id:1});
-            expect(exp).toMatchObject({...experiment2,material_id:1,experiment_id:2});
+        test("returns the inserted mfc",async()=>{
+            const row = await model.insert(mfc2);
+            expect(row).toMatchObject({...mfc2,mfc_id:2});
         });
     });
     describe("update",()=>{
-        test("updates an experiment in db",async()=>{
-            await model.update(1,{...experiment2,material_id:1,NP_id:10});
-            const updatedExp = await db("mfcs").where({experiment_id:1}).first();
-            expect(updatedExp.NP_id).toBe(10);
+        test("updates an mfc in db",async()=>{
+            await model.update(1,{...mfc1,"mfc_%":20});
+            const row = await db("mfcs").where({mfc_id:1}).first();
+            expect(row["mfc_%"]).toBe(20);
         });
-        test("returns the updated experiment",async()=>{
-            const updatedExp = await model.update(1,{...experiment2,material_id:1,NP_id:10});
-            expect(updatedExp.NP_id).toBe(10);
+        test("returns the updated mfc",async()=>{
+            const row = await model.update(1,{...mfc1,"mfc_%":20});
+            expect(row["mfc_%"]).toBe(20);
         });
     });
     describe("delete",()=>{
-        test("deletes an experiment from the db",async()=>{
+        test("deletes an mfc from the db",async()=>{
             await model.remove(1);
             expect(await db("mfcs")).toHaveLength(0);
         });
-        test("returns the deleted experiment from the db",async()=>{
-            const deletedExp = await model.remove(1);
-            expect(deletedExp).toMatchObject({...experiment1,material_id:1});
+        test("returns the deleted mfc from the db",async()=>{
+            const row = await model.remove(1);
+            expect(row).toMatchObject({...mfc1,mfc_id:1});
         });
     });
 });

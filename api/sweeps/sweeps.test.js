@@ -35,7 +35,7 @@ describe("sweeps model",()=>{
         await db("materials").truncate();
         await db("materials").insert(material1);
         await db("experiments").insert(experiment1);
-        await db("sweeps").insert(sweep2);
+        await db("sweeps").insert(sweep1);
     });
     afterAll(async()=>{
         await db.destroy();
