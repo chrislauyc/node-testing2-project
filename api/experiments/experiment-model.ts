@@ -24,7 +24,7 @@ const remove=async(experiment_id:number):Promise<object>=>{
     return Promise.resolve(row);
 };
 
-module.exports = {
+export = {
     get,
     getById,
     insert,

@@ -1,4 +1,4 @@
-const model = require("./experiment-model");
+const model = require("./sweeps-model");
 const db = require("../../data/db-config");
 
 const material1 = {
@@ -66,13 +66,13 @@ describe("sweeps model",()=>{
     });
     describe("update",()=>{
         test("updates a sweep in db",async()=>{
-            await model.update(1,{...sweep1,total_pressure:10});
+            await model.update(1,{...sweep1,"total pressure":10});
             const row = await db("sweeps").where({sweep_id:1}).first();
-            expect(row.total_pressure).toBe(10);
+            expect(row["total pressure"]).toBe(10);
         });
         test("returns the updated sweep",async()=>{
-            const updatedExp = await model.update(1,{...sweep1,total_pressure:10});
-            expect(row.total_pressure).toBe(10);
+            const row = await model.update(1,{...sweep1,"total pressure":10});
+            expect(row["total pressure"]).toBe(10);
         });
     });
     describe("delete",()=>{

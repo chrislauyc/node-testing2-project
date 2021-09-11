@@ -1,4 +1,4 @@
-const model = require("./experiment-model");
+const model = require("./temperatures-model");
 const db = require("../../data/db-config");
 const material1 = {
     material_name:"graphite"
@@ -9,11 +9,6 @@ const experiment1 = {
     NP_id: 0,
     material_id: 1
 }
-
-
-const material1 = {
-    material_name:"graphite"
-};
 
 const temperature1 = {
     "temperature scan #":1,

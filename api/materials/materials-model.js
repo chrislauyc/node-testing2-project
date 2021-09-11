@@ -37,40 +37,40 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 var db = require("../../data/db-config");
 var get = function () {
-    return db("gases");
+    return db("materials");
 };
-var getById = function (gas_id) {
-    return db("gases").where({ gas_id: gas_id }).first();
+var getById = function (material_id) {
+    return db("materials").where({ material_id: material_id }).first();
 };
 var insert = function (exp) { return __awaiter(void 0, void 0, void 0, function () {
-    var gas_id;
+    var material_id;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, db("gases").insert(exp)];
+            case 0: return [4 /*yield*/, db("materials").insert(exp)];
             case 1:
-                gas_id = (_a.sent())[0];
-                return [2 /*return*/, getById(gas_id)];
+                material_id = (_a.sent())[0];
+                return [2 /*return*/, getById(material_id)];
         }
     });
 }); };
-var update = function (gas_id, exp) { return __awaiter(void 0, void 0, void 0, function () {
+var update = function (material_id, exp) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, db("gases").where({ gas_id: gas_id }).update(exp)];
+            case 0: return [4 /*yield*/, db("materials").where({ material_id: material_id }).update(exp)];
             case 1:
                 _a.sent();
-                return [2 /*return*/, getById(gas_id)];
+                return [2 /*return*/, getById(material_id)];
         }
     });
 }); };
-var remove = function (gas_id) { return __awaiter(void 0, void 0, void 0, function () {
+var remove = function (material_id) { return __awaiter(void 0, void 0, void 0, function () {
     var row;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, getById(gas_id)];
+            case 0: return [4 /*yield*/, getById(material_id)];
             case 1:
                 row = _a.sent();
-                return [4 /*yield*/, db("gases").where({ gas_id: gas_id }).delete()];
+                return [4 /*yield*/, db("materials").where({ material_id: material_id }).delete()];
             case 2:
                 _a.sent();
                 return [2 /*return*/, Promise.resolve(row)];

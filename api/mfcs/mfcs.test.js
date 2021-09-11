@@ -1,4 +1,4 @@
-const model = require("./experiment-model");
+const model = require("./mfcs-model");
 const db = require("../../data/db-config");
 
 const material1 = {
@@ -36,6 +36,7 @@ describe("mfcs model",()=>{
         await db.migrate.latest();
     });
     beforeEach(async()=>{
+        await db("mfcs").truncate();
         await db("sweeps").truncate();
         await db("experiments").truncate();
         await db("materials").truncate();
@@ -60,7 +61,7 @@ describe("mfcs model",()=>{
         test("returns the correct mfcs",async()=>{
             const expected = await db("mfcs").where({mfc_id:1}).first();
             const actual = await model.getById(1);
-            expect(expected).toMatchObject(actual);
+            expect(actual).toMatchObject(expected);
         });
     });
     describe("insert",()=>{
