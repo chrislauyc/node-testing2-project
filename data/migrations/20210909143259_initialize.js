@@ -45,7 +45,7 @@ exports.up = function(knex){
         .onDelete("CASCADE");
 
     })
-    .createTabe("sweeps",(table)=>{
+    .createTable("sweeps",(table)=>{
         table.increments("sweep_id");
         table.integer("experiment_id")
         .unsigned()
@@ -58,21 +58,14 @@ exports.up = function(knex){
         .unsigned()
         .notNullable();
         table.double("total pressure")
-        .unsigned();
         table.double("high frequency")
-        ,unsigned();
         table.double("low frequency")
-        .unsigned();
         table.double("drive amplitude")
-        .unsigned();
         table.double("dwell time")
-        .unsigned();
         table.double("sweep time")
-        .unsigned();
         table.double("RF Vo A");
         table.double("RF Vo B");
         table.double("RF frequency")
-        .unsigned();
         table.double("green laser mW");
         table.double("green laser photodiode V");
         table.double("green laser V");
